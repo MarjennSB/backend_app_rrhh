@@ -1,4 +1,4 @@
-import { IsInt, IsNotEmpty, IsOptional, IsDateString, IsString, MaxLength, Matches } from 'class-validator';
+import { IsInt, IsNotEmpty, IsOptional, IsDateString, IsString, MaxLength, Matches, IsBoolean } from 'class-validator';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 
 export class CreateAttendanceDto {
@@ -34,4 +34,9 @@ export class CreateAttendanceDto {
   @MaxLength(255)
   @IsOptional()
   observation?: string;
+
+  @ApiPropertyOptional({ example: true })
+  @IsBoolean()
+  @IsOptional()
+  status?: boolean;
 }

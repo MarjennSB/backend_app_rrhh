@@ -19,20 +19,15 @@ export class CreateUserDto {
   @IsOptional()
   second_last_name?: string;
 
-  @ApiPropertyOptional({ example: 'juan@correo.com' })
+  @ApiProperty({ example: 'juan@correo.com' })
   @IsEmail({}, { message: 'Debe ser un correo válido' })
   @MaxLength(150)
-  @IsOptional()
-  email?: string;
+  email: string;
 
   @ApiProperty({ example: 1, description: 'ID del rol asignado' })
   @IsInt()
   role_id: number;
 
-  @ApiProperty({ example: 'juanito123' })
-  @IsString()
-  @MaxLength(60)
-  login: string;
 
   @ApiProperty({ example: 'miContraseñaSecreta' })
   @IsString()

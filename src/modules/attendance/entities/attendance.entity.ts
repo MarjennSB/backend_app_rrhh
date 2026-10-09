@@ -33,6 +33,9 @@ export class Attendance {
   @Column({ type: 'varchar', length: 255, nullable: true })
   observation: string;
 
+  @Column({ type: 'boolean', default: true })
+  status: boolean;
+
   @CreateDateColumn({ type: 'timestamp' })
   created_at: Date;
 

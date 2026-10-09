@@ -12,8 +12,8 @@ export class AuthService {
   ) { }
 
   async login(dto: LoginAuthDto) {
-    // 1. Buscamos al usuario en la base de datos por su login
-    const user = await this.userService.findByLogin(dto.login);
+    // 1. Buscamos al usuario en la base de datos por su email
+    const user = await this.userService.findByEmail(dto.email);
     
     // Si no existe, o si está inactivo, rechazamos
     if (!user || !user.status) {
@@ -35,7 +35,7 @@ export class AuthService {
     // 4. Preparamos el Payload del JWT
     const payload = {
       sub: user.id, // ID del usuario
-      login: user.login,
+      email: user.email,
       role: roleName, 
       permissions: permissions
     };
@@ -44,6 +44,15 @@ export class AuthService {
     return {
       message: `Bienvenido, ${user.first_name} ${user.last_name || ''}`.trim(),
       access_token: await this.jwtService.signAsync(payload),
+      token_type: 'bearer',
+      user: {
+        id: user.id,
+        email: user.email,
+        first_name: user.first_name,
+        last_name: user.last_name,
+        roles: [roleName],
+        role_id: user.role_id
+      }
     };
   }
 }

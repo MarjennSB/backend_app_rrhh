@@ -1,4 +1,4 @@
-import { IsString, MaxLength, IsOptional, IsBoolean } from 'class-validator';
+import { IsString, MaxLength, IsOptional, IsBoolean, IsInt, IsNotEmpty } from 'class-validator';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 
 export class CreatePositionDto {
@@ -11,4 +11,9 @@ export class CreatePositionDto {
   @IsBoolean()
   @IsOptional()
   status?: boolean;
+
+  @ApiProperty({ example: 1, description: 'ID de la Unidad Orgánica a la que pertenece este cargo' })
+  @IsInt()
+  @IsNotEmpty()
+  organizational_unit_id: number;
 }

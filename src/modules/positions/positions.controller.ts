@@ -21,6 +21,13 @@ export class PositionsController {
     return this.positionsService.index();
   }
 
+  @Get('by-unit/:unitId')
+  @RequireRoles('Administrador')
+  @ApiOperation({ summary: 'Listar cargos filtrados por unidad orgánica' })
+  findByUnit(@Param('unitId') unitId: string) {
+    return this.positionsService.findByUnit(+unitId);
+  }
+
   @Post()
   @RequireRoles('Administrador')
   @ApiOperation({ summary: 'Crear un cargo (store)' })

@@ -14,7 +14,7 @@ export class CustomValidationPipe implements PipeTransform<any> {
     }
     
     // Convertimos el JSON puro que llega en la petición a una instancia de la clase DTO
-    const object = plainToInstance(metatype, value);
+    const object = plainToInstance(metatype, value, { enableImplicitConversion: true });
     
     // Validamos la instancia usando class-validator
     const errors = await validate(object);

@@ -1,22 +1,39 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { OrganizationalUnit } from './entities/organizational-unit.entity.js';
 import { CreateOrganizationalUnitDto } from './dto/create-organizational-unit.dto.js';
 import { UpdateOrganizationalUnitDto } from './dto/update-organizational-unit.dto.js';
 
 @Injectable()
 export class OrganizationalUnitsService {
-  create(createOrganizationalUnitDto: CreateOrganizationalUnitDto) {
-    return 'This action adds a new organizationalUnit';
+  constructor(
+    @InjectRepository(OrganizationalUnit)
+    private readonly orgUnitRepository: Repository<OrganizationalUnit>,
+  ) {}
+
+  async create(createOrganizationalUnitDto: CreateOrganizationalUnitDto) {
+    const orgUnit = this.orgUnitRepository.create(createOrganizationalUnitDto);
+    return await this.orgUnitRepository.save(orgUnit);
   }
 
-  findAll() {
-    return `This action returns all organizationalUnits`;
+  async findAll() {
+    return await this.orgUnitRepository.find({
+      order: { id: 'ASC' }
+    });
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} organizationalUnit`;
+  async findOne(id: number) {
+    const orgUnit = await this.orgUnitRepository.findOne({ where: { id } });
+    if (!orgUnit) {
+      throw new NotFoundException(`Unidad Organizacional con ID ${id} no encontrada`);
+    }
+    return orgUnit;
   }
 
-  update(id: number, updateOrganizationalUnitDto: UpdateOrganizationalUnitDto) {
-    return `This action updates a #${id} organizationalUnit`;
+  async update(id: number, updateOrganizationalUnitDto: UpdateOrganizationalUnitDto) {
+    const orgUnit = await this.findOne(id);
+    Object.assign(orgUnit, updateOrganizationalUnitDto);
+    return await this.orgUnitRepository.save(orgUnit);
   }
 }

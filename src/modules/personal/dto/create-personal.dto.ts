@@ -17,6 +17,11 @@ export class CreatePersonalDto {
   @IsNotEmpty()
   organizational_unit_id: number;
 
+  @ApiProperty({ example: 1 })
+  @IsInt()
+  @IsNotEmpty()
+  schedule_id: number;
+
   @ApiPropertyOptional({ example: true })
   @IsBoolean()
   @IsOptional()

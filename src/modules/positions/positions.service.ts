@@ -13,7 +13,20 @@ export class PositionsService {
   ) {}
 
   async index() {
-    return this.positionRepository.find();
+    return this.positionRepository.find({
+      relations: {
+        organizational_unit: true
+      }
+    });
+  }
+
+  async findByUnit(unitId: number) {
+    return this.positionRepository.find({
+      where: { organizational_unit_id: unitId },
+      relations: {
+        organizational_unit: true
+      }
+    });
   }
 
   async store(dto: CreatePositionDto) {
@@ -22,13 +35,17 @@ export class PositionsService {
   }
 
   async update(id: number, dto: UpdatePositionDto) {
-    const position = await this.positionRepository.findOne({ where: { id } });
+    const position = await this.positionRepository.findOne({ 
+      where: { id },
+      relations: { organizational_unit: true }
+    });
     if (!position) {
       throw new NotFoundException(`Cargo con ID ${id} no encontrado`);
     }
 
     if (dto.name !== undefined) position.name = dto.name;
     if (dto.status !== undefined) position.status = dto.status;
+    if (dto.organizational_unit_id !== undefined) position.organizational_unit_id = dto.organizational_unit_id;
 
     return this.positionRepository.save(position);
   }

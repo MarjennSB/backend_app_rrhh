@@ -7,7 +7,7 @@ export async function seedUsers(dataSource: DataSource): Promise<void> {
     const userRepository = dataSource.getRepository(User);
     const roleRepository = dataSource.getRepository(Role);
 
-    const adminExists = await userRepository.findOne({ where: { login: 'admin' } });
+    const adminExists = await userRepository.findOne({ where: { email: 'admin@correo.com' } });
 
     if (!adminExists) {
         const adminRole = await roleRepository.findOne({ where: { name: 'Administrador' } });
@@ -20,8 +20,7 @@ export async function seedUsers(dataSource: DataSource): Promise<void> {
         const hashedPassword = await bcrypt.hash('admin123', 10);
 
         const admin = userRepository.create({
-            login: 'admin',
-            email: 'admin@sistema.com',
+            email: 'admin@correo.com',
             password: hashedPassword,
             first_name: 'Administrador',
             last_name: 'Sistema',
@@ -30,7 +29,7 @@ export async function seedUsers(dataSource: DataSource): Promise<void> {
         });
 
         await userRepository.save(admin);
-        console.log(`  ✔ Usuario creado: login: admin / admin123`);
+        console.log(`  ✔ Usuario creado: email: admin@correo.com / admin123`);
     } else {
         console.log(`  - Usuario ya existe: admin`);
     }

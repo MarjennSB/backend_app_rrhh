@@ -16,10 +16,9 @@ export class UserService {
     private readonly roleRepository: Repository<Role>,
   ) {}
 
-  // Este se queda porque AuthModule lo necesita para el login
-  async findByLogin(login: string): Promise<User | null> {
+  async findByEmail(email: string): Promise<User | null> {
     return this.userRepository.findOne({ 
-      where: { login },
+      where: { email },
       relations: {role: {permissions: true}}
     });
   }
@@ -29,8 +28,8 @@ export class UserService {
   }
 
   async store(dto: CreateUserDto) {
-    const loginExists = await this.userRepository.findOne({ where: { login: dto.login } });
-    if (loginExists) throw new BadRequestException('El login ya está registrado');
+    const emailExists = await this.userRepository.findOne({ where: { email: dto.email } });
+    if (emailExists) throw new BadRequestException('El email ya está registrado');
 
     const hashedPassword = await bcrypt.hash(dto.password, 10);
 
@@ -63,7 +62,6 @@ export class UserService {
     if (dto.last_name !== undefined) user.last_name = dto.last_name;
     if (dto.second_last_name !== undefined) user.second_last_name = dto.second_last_name;
     if (dto.email !== undefined) user.email = dto.email;
-    if (dto.login !== undefined) user.login = dto.login;
     if (dto.profile_photo_path !== undefined) user.profile_photo_path = dto.profile_photo_path;
     if (dto.status !== undefined) user.status = dto.status;
 

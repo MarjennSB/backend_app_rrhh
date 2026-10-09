@@ -15,8 +15,8 @@ export class User {
   @Column({ type: 'varchar', length: 100, nullable: true })
   second_last_name?: string;
 
-  @Column({ type: 'varchar', length: 150, nullable: true })
-  email?: string;
+  @Column({ type: 'varchar', length: 150, unique: true, nullable: false })
+  email!: string;
 
   @Column({ type: 'int', nullable: false })
   role_id!: number;
@@ -25,8 +25,6 @@ export class User {
   @JoinColumn({ name: 'role_id' })
   role!: Role;
 
-  @Column({ type: 'varchar', length: 60, unique: true, nullable: false })
-  login!: string;
 
   @Column({ type: 'varchar', length: 255, nullable: false })
   password!: string;

@@ -26,6 +26,41 @@ export class CreateScheduleDto {
   @IsOptional()
   tolerance_minutes?: number;
 
+  @ApiPropertyOptional({ example: true })
+  @IsBoolean()
+  @IsOptional()
+  workday_monday?: boolean;
+
+  @ApiPropertyOptional({ example: true })
+  @IsBoolean()
+  @IsOptional()
+  workday_tuesday?: boolean;
+
+  @ApiPropertyOptional({ example: true })
+  @IsBoolean()
+  @IsOptional()
+  workday_wednesday?: boolean;
+
+  @ApiPropertyOptional({ example: true })
+  @IsBoolean()
+  @IsOptional()
+  workday_thursday?: boolean;
+
+  @ApiPropertyOptional({ example: true })
+  @IsBoolean()
+  @IsOptional()
+  workday_friday?: boolean;
+
+  @ApiPropertyOptional({ example: false })
+  @IsBoolean()
+  @IsOptional()
+  workday_saturday?: boolean;
+
+  @ApiPropertyOptional({ example: false })
+  @IsBoolean()
+  @IsOptional()
+  workday_sunday?: boolean;
+
   @ApiPropertyOptional({ example: true, description: 'Estado activo o inactivo' })
   @IsBoolean()
   @IsOptional()

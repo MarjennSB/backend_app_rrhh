@@ -26,6 +26,27 @@ export class Schedule {
   tolerance_minutes: number = 0;
 
   @Column({ type: 'boolean', default: true })
+  workday_monday: boolean = true;
+
+  @Column({ type: 'boolean', default: true })
+  workday_tuesday: boolean = true;
+
+  @Column({ type: 'boolean', default: true })
+  workday_wednesday: boolean = true;
+
+  @Column({ type: 'boolean', default: true })
+  workday_thursday: boolean = true;
+
+  @Column({ type: 'boolean', default: true })
+  workday_friday: boolean = true;
+
+  @Column({ type: 'boolean', default: false })
+  workday_saturday: boolean = false;
+
+  @Column({ type: 'boolean', default: false })
+  workday_sunday: boolean = false;
+
+  @Column({ type: 'boolean', default: true })
   status: boolean = true;
 
   @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })

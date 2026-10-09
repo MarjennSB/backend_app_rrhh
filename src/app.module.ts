@@ -28,8 +28,21 @@ import { VacationModule } from './modules/vacation/vacation.module.js';
 import { IncidentModule } from './modules/incident/incident.module.js';
 import { PersonalDocumentsModule } from './modules/personal-documents/personal-documents.module.js';
 
+import { ServeStaticModule } from '@nestjs/serve-static';
+import { join } from 'path';
+import { fileURLToPath } from 'url';
+import { dirname } from 'path';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
 @Module({
   imports: [
+    // Servir archivos estaticos
+    ServeStaticModule.forRoot({
+      rootPath: join(__dirname, '..', 'uploads'),
+      serveRoot: '/uploads',
+    }),
     // 1. Cargar el módulo de configuración globalmente (.env)
     ConfigModule.forRoot({
       isGlobal: true, 

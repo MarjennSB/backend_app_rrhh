@@ -1,8 +1,8 @@
-import { IsString, MinLength } from 'class-validator';
+import { IsString, MinLength, IsEmail } from 'class-validator';
 
 export class LoginAuthDto {
-  @IsString({ message: 'El login es obligatorio' })
-  login: string;
+  @IsEmail({}, { message: 'El email debe ser válido' })
+  email: string;
 
   @IsString()
   @MinLength(6, { message: 'La contraseña debe tener al menos 6 caracteres' })

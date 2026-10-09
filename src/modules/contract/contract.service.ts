@@ -13,12 +13,28 @@ export class ContractService {
   ) {}
 
   async store(createContractDto: CreateContractDto) {
+    // Desactivar todos los demás contratos de este personal de forma obligatoria ("si o si")
+    await this.contractRepository.update(
+      { personal_id: createContractDto.personal_id },
+      { status: false }
+    );
+    
+    // Forzar el nuevo contrato a activo
+    createContractDto.status = true;
+
     const contract = this.contractRepository.create(createContractDto);
     return this.contractRepository.save(contract);
   }
 
   async index() {
-    return this.contractRepository.find();
+    return this.contractRepository.find({
+      relations: {
+        personal: {
+          person: true
+        },
+        contract_type: true
+      }
+    });
   }
 
   async update(id: number, updateContractDto: UpdateContractDto) {
@@ -27,7 +43,28 @@ export class ContractService {
       throw new NotFoundException('Contrato no encontrado');
     }
     
+    const targetPersonalId = updateContractDto.personal_id ?? contract.personal_id;
+    
+    if (updateContractDto.status === true) {
+      // Si este contrato se marca como activo, desactivar los demás del mismo personal
+      await this.contractRepository
+        .createQueryBuilder()
+        .update(Contract)
+        .set({ status: false })
+        .where('personal_id = :pid AND id != :id', { pid: targetPersonalId, id })
+        .execute();
+    }
+
     Object.assign(contract, updateContractDto);
+    
+    // TypeORM fix para columnas que también tienen relaciones eager cargadas
+    if (updateContractDto.personal_id) {
+      delete (contract as any).personal;
+    }
+    if (updateContractDto.contract_type_id) {
+      delete (contract as any).contract_type;
+    }
+
     return this.contractRepository.save(contract);
   }
 }

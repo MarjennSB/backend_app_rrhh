@@ -1,4 +1,5 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
+import { Position } from '../../positions/entities/position.entity.js';
 
 @Entity('organizational_units')
 export class OrganizationalUnit {
@@ -13,4 +14,7 @@ export class OrganizationalUnit {
 
   @Column({ type: 'boolean', default: true })
   status: boolean;
+
+  @OneToMany(() => Position, (position) => position.organizational_unit)
+  positions: Position[];
 }

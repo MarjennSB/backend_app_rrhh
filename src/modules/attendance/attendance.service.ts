@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, NotFoundException, BadRequestException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreateAttendanceDto } from './dto/create-attendance.dto.js';
@@ -13,6 +13,18 @@ export class AttendanceService {
   ) {}
 
   async store(createAttendanceDto: CreateAttendanceDto) {
+    // Validar que no exista ya un registro de asistencia para este empleado en esta fecha
+    const existing = await this.attendanceRepository.findOne({
+      where: { 
+        personal_id: createAttendanceDto.personal_id,
+        date: createAttendanceDto.date
+      }
+    });
+
+    if (existing) {
+      throw new BadRequestException('El empleado ya tiene un registro de asistencia para esta fecha. Si desea modificarlo, actualice el registro existente.');
+    }
+
     const attendance = this.attendanceRepository.create(createAttendanceDto);
     return this.attendanceRepository.save(attendance);
   }
